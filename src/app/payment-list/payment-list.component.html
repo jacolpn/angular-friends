@@ -6,7 +6,7 @@
             <h2>Meus pagamentos</h2>
 
             <div class="text-end mb-3">
-                <button type="button" class="btn btn-primary btn-sm" (click)="newPayment.open(); advancedFilterForm.reset();">
+                <button type="button" class="btn btn-primary btn-sm" (click)="addPayment()">
                     ADICIONAR PAGAMENTO
                 </button>
             </div>
@@ -95,7 +95,7 @@
 
 <po-modal
     #newPayment
-    p-title="Adicionar pagamento"
+    [p-title]="titleModal"
 >
     <form [formGroup]="advancedFilterForm">
         <div class="po-row">

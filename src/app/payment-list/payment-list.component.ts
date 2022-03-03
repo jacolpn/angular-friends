@@ -36,6 +36,7 @@ export class PaymentListComponent implements OnInit, OnDestroy {
     totalPages: Array<any> = [];
     currentPage: number = 1;
     pageSize: number = 5;
+    titleModal: string = 'Adicionar pagamento';
 
     userSearch: string = '';
     userSearchAdvanced: string = '';
@@ -143,6 +144,7 @@ export class PaymentListComponent implements OnInit, OnDestroy {
             }
 
             payment.paid = false;
+            
 
             this.paymentSubscriptionPost$ = this.paymentService.post(payment).subscribe({
                 next: () => {
@@ -159,13 +161,19 @@ export class PaymentListComponent implements OnInit, OnDestroy {
         this.poNotification.error('Favor preencher todos os campos!')
     }
 
+    addPayment() {
+        this.newPayment.open();
+        this.advancedFilterForm.reset();
+        this.titleModal = 'Adicionar pagamento';
+    }
+
     editPayment(register: Payment) {
         let payment: any = register;
-        payment.date = formatDate(register.date, 'yyyy-MM-dd', 'pt')
-
+        payment.date = formatDate(register.date, 'yyyy-MM-dd', 'pt');
+        
+        this.titleModal = 'Editar pagamento';
         this.paymentId = register.id;
         this.editRegister = true;
-
         this.advancedFilterForm.patchValue(payment);
         this.newPayment.open();
     }
