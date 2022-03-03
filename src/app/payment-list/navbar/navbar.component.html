@@ -1,0 +1,37 @@
+<nav class="navbar navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="/payments">
+            <h1><strong class="title-bold-login">Pay</strong>Friends</h1>
+        </a>
+
+        <po-avatar
+            p-size="sm"
+            p-src="../../assets/images/picpay.png"
+            (p-click)="perfilModal.open()"
+            p-loading="lazy"
+        >
+        </po-avatar>
+    </div>
+</nav>
+
+<po-modal
+    #perfilModal
+    p-title="Meu perfil"
+>
+    <div class="modal-login">
+        <po-avatar
+            p-size="lg"
+            p-src="../../assets/images/picpay.png"
+            (p-click)="perfilModal.open()"
+            p-loading="lazy"
+        >
+        </po-avatar>
+
+        <p class="po-ml-3 po-font-text-bold">Email: </p>
+        <span class="po-ml-1">{{ email }}</span>
+    </div>
+
+    <po-modal-footer [p-disabled-align]="false">
+        <po-button p-type="default" p-label="Logout" (p-click)="logout(); perfilModal.close();"> </po-button>
+    </po-modal-footer>
+</po-modal>

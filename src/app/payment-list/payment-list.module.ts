@@ -5,13 +5,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { PoModule } from '@po-ui/ng-components';
 
 import { PaymentListComponent } from './payment-list.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 import { PaymentService } from '../shared/services/payment.service';
 
 import { PaymentRoutingModule } from './payment-routing.module';
 
 @NgModule({
-    declarations: [PaymentListComponent],
+    declarations: [
+        PaymentListComponent,
+        NavbarComponent
+    ],
     imports: [
         CommonModule,
         FormsModule,

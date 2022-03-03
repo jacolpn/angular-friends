@@ -1,0 +1,19 @@
+nav {
+    background-color: var(--color-background-blue);
+    height: 10vh;
+}
+
+h1 {
+    font-size: 24px;
+    color: var(--color-white);
+    font-weight: 200;
+}
+
+.title-bold-login {
+    color: var(--color-white);
+    font-weight: 600;
+}
+
+.modal-login {
+    display: flex;
+}

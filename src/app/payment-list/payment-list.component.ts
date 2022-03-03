@@ -1,7 +1,9 @@
+import { formatDate, formatNumber } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { PoDialogService, PoDynamicFormField, PoModalAction, PoNotificationService, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PoDialogService, PoModalAction, PoNotificationService, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { Subscription } from 'rxjs';
+import { Payment } from '../shared/interfaces/payment.interface';
 import { PaymentService } from '../shared/services/payment.service';
 
 @Component({
@@ -11,13 +13,20 @@ import { PaymentService } from '../shared/services/payment.service';
 })
 export class PaymentListComponent implements OnInit {
     @ViewChild('newPayment', { static: true }) newPayment: any;
+    @ViewChild('advancedFilterModal', { static: true }) advancedFilterModal: any;
 
-    paymentSubscription$: Subscription | undefined;
+    paymentSubscriptionGet$: Subscription | undefined;
+    paymentSubscriptionPost$: Subscription | undefined;
+    paymentSubscriptionUpdate$: Subscription | undefined;
+    paymentSubscriptionDelete$: Subscription | undefined;
+
     paymentColumns: Array<PoTableColumn> = [];
 	tableActions: Array<PoTableAction> = [];
-    
-    hiringProcesses: Array<object> = [];
-    disclaimers: Array<any> | string = [];
+    advancedFilterPrimaryAction: PoModalAction;
+
+    disclaimers: string = '';
+    editRegister: boolean = false;
+    paymentId: string = '';
     paymentItems: Array<any> = [];
     isLoading: boolean = false;
     advancedFilterForm: FormGroup;
@@ -25,6 +34,10 @@ export class PaymentListComponent implements OnInit {
     pageSize: number = 20;
 
     userSearch: string = '';
+    userSearchAdvanced: string = '';
+    valueSearchAdvanced: number = 0;
+    dateSearchAdvanced: Date = new Date();
+    titleSearchAdvanced: string = '';
     enterPressed: boolean = false;
 
     constructor(
@@ -34,11 +47,26 @@ export class PaymentListComponent implements OnInit {
 		private formBuilder: FormBuilder
     ) {
         this.advancedFilterForm = this.formBuilder.group({
-			user: [{ value: '', disabled: false, require: true }],
-			value: [{ value: '', disabled: false, require: true }],
-			date: [{ value: '', disabled: false, require: true }],
-			title: [{ value: '', disabled: false, require: true }]
+            user: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(50)])],
+            value: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(99999.99)])],
+            date: ['', Validators.compose([Validators.required])],
+            title: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(50)])],
 		});
+
+        this.advancedFilterPrimaryAction = {
+            action: () => {
+                this.disclaimers = '';
+                this.disclaimers += this.userSearchAdvanced !== '' ? `user=${this.userSearchAdvanced}` : 'user_like=';
+                this.disclaimers += this.valueSearchAdvanced > 0 ? `&value=${this.valueSearchAdvanced}` : '&value_like=';
+                this.disclaimers += this.dateSearchAdvanced ? `&date=${this.dateSearchAdvanced}` : '&date_like=';
+                this.disclaimers += this.titleSearchAdvanced !== '' ? `&title=${this.titleSearchAdvanced}` : '&title_like=';
+
+                this.onChangeDisclaimer(this.disclaimers, 'advanced');
+
+                this.advancedFilterModal.close();
+            },
+            label: 'Aplicar filtro',
+        };
     }
 
     ngOnInit(): void {
@@ -46,6 +74,7 @@ export class PaymentListComponent implements OnInit {
 			{ action: this.editPayment.bind(this), icon: 'po-icon-edit', label: 'Editar', separator: true },
 			{ action: this.excludePayment.bind(this), icon: 'po-icon-delete', label: 'Excluir' }
 		];
+
         this.paymentColumns = this.getColumns();
         this.advancedFilterForm.reset();
         this.getItems(1, this.pageSize);
@@ -64,13 +93,13 @@ export class PaymentListComponent implements OnInit {
     getItems(currentPage: number, pageSize: number): void {
         this.isLoading = true;
         this.paymentItems = [];
+        this.currentPage = currentPage;
 
-        this.paymentSubscription$ = this.paymentService
+        this.paymentSubscriptionGet$ = this.paymentService
             .get(this.disclaimers, currentPage, pageSize)
             .subscribe({
-                next: (response: any) => {
+                next: (response: Array<Payment>) => {
                     this.paymentItems = [...this.paymentItems, ...response];
-                    this.hiringProcesses = this.paymentItems;
                     this.isLoading = false;
                 },
                 error: (error: any) => {
@@ -82,16 +111,27 @@ export class PaymentListComponent implements OnInit {
 
     savePayment(payment: any) {
         if (this.advancedFilterForm.valid) {
-            this.paymentService
-                .post(payment)
-                .subscribe({
+            if (this.editRegister) {
+                this.paymentSubscriptionUpdate$ = this.paymentService.update(this.paymentId, payment).subscribe({
                     next: () => {
-                        this.poNotification.success('Pagamento cadastrado com sucesso!');
+                        this.poNotification.success('Pagamento alterado com sucesso!');
                         this.newPayment.close();
                         this.getItems(1, this.pageSize);
                     },
                     error: () => this.poNotification.error('Verifique sua conexão!'),
                 });
+                
+                return;
+            }
+
+            this.paymentSubscriptionPost$ = this.paymentService.post(payment).subscribe({
+                next: () => {
+                    this.poNotification.success('Pagamento cadastrado com sucesso!');
+                    this.newPayment.close();
+                    this.getItems(1, this.pageSize);
+                },
+                error: () => this.poNotification.error('Verifique sua conexão!'),
+            });
 
             return;
         }
@@ -99,8 +139,10 @@ export class PaymentListComponent implements OnInit {
         this.poNotification.error('Favor preencher todos os campos!')
     }
 
-    editPayment(e: any) {
-        this.advancedFilterForm.patchValue(e)
+    editPayment(register: Payment) {
+        this.paymentId = register.id;
+        this.editRegister = true;
+        this.advancedFilterForm.patchValue(register);
         this.newPayment.open();
     }
 
@@ -108,18 +150,16 @@ export class PaymentListComponent implements OnInit {
 		return row.user === null;
 	}
 
-    excludePayment(payment: any) {
+    excludePayment(payment: Payment) {
         this.poDialog.confirm({
             title: 'Excluir pagamento',
             message: `
-                Usuário: ${payment['user']} <br>
-                Data: ${payment['date']} <br>
-                Valor: R$: ${payment['value']}
+                Usuário: ${payment.user} <br>
+                Data: ${formatDate(payment.date, 'shortDate', 'pt')} <br>
+                Valor: R$: ${formatNumber(payment.value, 'pt')}
             `,
             confirm: () => {
-                this.paymentService
-                    .delete(payment['id'])
-                    .subscribe({
+                this.paymentSubscriptionDelete$= this.paymentService.delete(payment['id']).subscribe({
                     next: () => {
                         this.poNotification.success('Pagamento removido com sucesso!');
                         this.getItems(1, this.pageSize);
@@ -132,7 +172,7 @@ export class PaymentListComponent implements OnInit {
 
     onChangeQuickSearch() {
         if (!this.enterPressed) {
-            this.onChangeDisclaimer(this.userSearch);
+            this.onChangeDisclaimer(this.userSearch, 'simple');
         }
 
         this.enterPressed = false;
@@ -141,12 +181,19 @@ export class PaymentListComponent implements OnInit {
     keyPressInput(key: number) {
         if (key === 13) {
             this.enterPressed = true;
-            this.onChangeDisclaimer(this.userSearch);
+            this.onChangeDisclaimer(this.userSearch, 'simple');
         }
     }
 
-    onChangeDisclaimer(disclaimers: any): void {
-        this.disclaimers = `user_like=${disclaimers}`;
+    onChangeDisclaimer(disclaimers: string, filter: string): void {
+        if (filter === 'simple') {
+            this.disclaimers = `user_like=${disclaimers}`;
+            this.getItems(1, this.pageSize);
+
+            return;
+        }
+    
+        this.disclaimers = disclaimers;
         this.getItems(1, this.pageSize);
     }
 
@@ -166,5 +213,23 @@ export class PaymentListComponent implements OnInit {
 
         this.currentPage === 3 ? 3 : this.currentPage++;
         this.getItems(this.currentPage, this.pageSize);
+    }
+
+    ngOnDestroy(): void {
+        if (this.paymentSubscriptionDelete$ !== undefined) {
+            this.paymentSubscriptionDelete$.unsubscribe();
+        }
+    
+        if (this.paymentSubscriptionUpdate$ !== undefined) {
+            this.paymentSubscriptionUpdate$.unsubscribe();
+        }
+
+        if (this.paymentSubscriptionGet$ !== undefined) {
+            this.paymentSubscriptionGet$.unsubscribe();
+        }
+
+        if (this.paymentSubscriptionPost$ !== undefined) {
+            this.paymentSubscriptionPost$.unsubscribe();
+        }
     }
 }

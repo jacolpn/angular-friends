@@ -1,18 +1,28 @@
 <section class="wrapper">
     <div class="container-form">
-        <form>
+        <form [formGroup]="formLogin">
             <h1><strong class="title-bold-login">Pay</strong>Friends</h1>
 
             <h2>Bem vindo de volta</h2>
 
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email</label>
-                <input type="email" class="form-control">
+                <po-input
+                    p-clean
+                    formControlName="email"
+                    p-icon="po-icon-user"
+                    p-placeholder="Email"
+                    [p-auto-focus]="true"
+                >
+                </po-input>
             </div>
 
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Senha</label>
-                <input type="password" class="form-control">
+                <po-password
+                    name="password"
+                    p-placeholder="Senha"
+                    formControlName="password"
+                >
+                </po-password>
             </div>
 
             <button type="submit" class="btn btn-primary btn-sm col-12" (click)="login()">ENTRAR</button>

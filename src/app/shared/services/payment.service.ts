@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+
 import { API } from 'src/app/app.api';
+
+import { Payment } from '../interfaces/payment.interface';
 
 @Injectable()
 export class PaymentService {
@@ -9,7 +12,7 @@ export class PaymentService {
 
 	constructor(private http: HttpClient) { }
 
-	get(filters: any, currentPage: number, pageSize: number): any {
+	get(filters: string, currentPage: number, pageSize: number): any {
 		let url: string;
 		url = `${this.apiUrl}?_page=${currentPage}&_limit=${pageSize}`;
 
@@ -17,15 +20,15 @@ export class PaymentService {
 			url = `${url}&${filters}`;
 		}
 
-		return this.http.get<any>(url);
+		return this.http.get<Payment>(url);
 	}
 
-	post(params: any): Observable<any> {
+	post(params: Payment): Observable<any> {
 		return this.http.post<any>(this.apiUrl, params);
 	}
 
-    update(body: any): Observable<string> {
-        return this.http.put<any>(`${this.apiUrl}`, body);
+    update(id: string, body: Payment): Observable<string> {
+        return this.http.put<any>(`${this.apiUrl}/${id}`, body);
     }
 
 	delete(id: String): Observable<string> {
