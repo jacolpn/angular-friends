@@ -1,0 +1,124 @@
+<nav class="navbar navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="/payments">
+            <h1><strong class="title-bold-login">Pay</strong>Friends</h1>
+        </a>
+    </div>
+</nav>
+
+<section>
+    <div class="wrapper">
+        <div class="container-table">
+            <h2>Meus pagamentos</h2>
+
+            <div class="text-end mb-3">
+                <button type="button" class="btn btn-primary btn-sm" (click)="newPayment.open(); advancedFilterForm.reset();">ADICIONAR PAGAMENTO</button>
+            </div>
+
+            <div class="table-list">
+                <div class="header-table">
+                    <po-input
+                        p-clean
+                        class="po-md-3 po-pr-0"
+                        p-icon="po-icon-search"
+                        p-placeholder="Pesquisar por usuário"
+                        [(ngModel)]="userSearch"
+                        (p-change)="onChangeQuickSearch()"
+                        (keypress)="keyPressInput($event.keyCode)"
+                    >
+                    </po-input>
+
+                    <div class="po-md-7 container-combo-box">
+                        <po-combo
+                            name="combo"
+                            class="po-md-2"
+                            p-placeholder="Exibir"
+                            [p-options]="[{ value: 5 }, { value: 10 }, { value: 15 }]"
+                            (p-change)="onChangeCombo($event)"
+                        >
+                        </po-combo>
+                    </div>
+
+                    <ul class="pagination pt-2">
+                        <li class="page-item"><po-button p-type="link" p-label="&laquo;" (p-click)="onChangePagination('previous')"></po-button></li>
+                        <li class="page-item"><po-button p-type="link" p-label="1" (p-click)="getItems(1, 5)"></po-button></li>
+                        <li class="page-item"><po-button p-type="link" p-label="2" (p-click)="getItems(2, 5)"></po-button></li>
+                        <li class="page-item"><po-button p-type="link" p-label="3" (p-click)="getItems(3, 5)"></po-button></li>
+                        <li class="page-item"><po-button p-type="link" p-label="&raquo;" (p-click)="onChangePagination('next')"></po-button></li>
+                    </ul>
+                </div>
+
+                <po-table
+                    [p-sort]="true"
+                    [p-actions]="tableActions"
+                    [p-columns]="paymentColumns"
+                    [p-items]="paymentItems"
+                    [p-loading]="isLoading"
+                    [p-hide-columns-manager]="true"
+                >
+                </po-table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<po-modal
+    #newPayment
+    p-title="Adicionar pagamento"
+>
+    <form [formGroup]="advancedFilterForm">
+        <div class="po-row">
+            <div class="po-md-6 po-pl-0">
+                <po-input
+                    formControlName="user"
+                    required="true"
+                    p-clean="true"
+                    p-placeholder="Usuário*"
+                    [p-auto-focus]="true"
+                    [p-maxlength]="50"
+                >        
+                </po-input>
+            </div>
+
+            <div class="po-md-6 po-pr-0">
+                <po-input
+                    formControlName="value"
+                    p-clean="true"
+                    p-placeholder="Valor*"
+                    required="true"
+                    [p-maxlength]="30"
+                >        
+                </po-input>
+            </div>
+        </div>
+
+        <div class="po-row">
+            <div class="po-md-6 po-pl-0">
+                <po-datepicker
+                    formControlName="date"
+                    p-clean="true"
+                    p-format="dd/mm/yyyy"
+                    required="true"
+                    p-placeholder="Data*"
+                >
+                </po-datepicker>
+            </div>
+
+            <div class="po-md-6 po-pr-0">
+                <po-input
+                    formControlName="title"
+                    p-clean="true"
+                    required="true"
+                    p-placeholder="Título*"
+                    [p-maxlength]="50"
+                >        
+                </po-input>
+            </div>
+        </div>
+    </form>
+
+    <po-modal-footer [p-disabled-align]="false">
+        <po-button p-type="default" p-label="Cancelar" (p-click)="newPayment.close(); advancedFilterForm.reset();"> </po-button>
+        <po-button p-type="primary" p-label="Salvar" style="background-color: var(--color-03);" (p-click)="savePayment(advancedFilterForm.value)"> </po-button>
+      </po-modal-footer>
+</po-modal>

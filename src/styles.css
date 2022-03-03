@@ -1,0 +1,8 @@
+* {
+    --color-background-gray: #F2F2F2;
+    --color-background-blue: #002D69;
+    --color-blue-light: rgba(47, 130, 221);
+    --color-blue-dark: rgba(0, 45, 105);
+    --color-text-black: #333333;
+    --color-white: #FFF;
+}
