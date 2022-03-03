@@ -1,12 +1,22 @@
 nav {
     background-color: var(--color-background-blue);
     height: 10vh;
+    display: flex;
+    justify-content: center;
+}
+
+.container-navbar {
+    display: flex;
+    width: 97vw;
+    justify-content: space-between;
+    align-items: center;
 }
 
 h1 {
     font-size: 24px;
     color: var(--color-white);
     font-weight: 200;
+    cursor: pointer;
 }
 
 .title-bold-login {

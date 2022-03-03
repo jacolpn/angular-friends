@@ -65,7 +65,7 @@ export class PaymentListComponent implements OnInit {
 
                 this.advancedFilterModal.close();
             },
-            label: 'Aplicar filtro',
+            label: 'Aplicar filtros',
         };
     }
 
