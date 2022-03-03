@@ -1,5 +1,5 @@
 import { formatDate, formatNumber } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PoDialogService, PoModalAction, PoNotificationService, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ import { PaymentService } from '../shared/services/payment.service';
     templateUrl: './payment-list.component.html',
     styleUrls: ['./payment-list.component.css']
 })
-export class PaymentListComponent implements OnInit {
+export class PaymentListComponent implements OnInit, OnDestroy {
     @ViewChild('newPayment', { static: true }) newPayment: any;
     @ViewChild('advancedFilterModal', { static: true }) advancedFilterModal: any;
 
