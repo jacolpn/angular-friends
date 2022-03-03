@@ -3,7 +3,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PoDialogService, PoModalAction, PoNotificationService, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { Subscription } from 'rxjs';
+
 import { Payment } from '../shared/interfaces/payment.interface';
+
 import { PaymentService } from '../shared/services/payment.service';
 
 @Component({
@@ -30,11 +32,14 @@ export class PaymentListComponent implements OnInit {
     paymentItems: Array<any> = [];
     isLoading: boolean = false;
     advancedFilterForm: FormGroup;
+    totalItems: number = 0;
+    totalPages: Array<any> = [];
     currentPage: number = 1;
-    pageSize: number = 20;
+    pageSize: number = 5;
 
     userSearch: string = '';
     userSearchAdvanced: string = '';
+    paid: boolean = true;
     valueSearchAdvanced: number = 0;
     dateSearchAdvanced: Date = new Date();
     titleSearchAdvanced: string = '';
@@ -82,15 +87,18 @@ export class PaymentListComponent implements OnInit {
 
     getColumns(): Array<PoTableColumn> {
         return [
-            { property: 'user', label: 'Usuário', width: '150px', type: 'string' },
+            { property: 'id', label: 'Id', type: 'string', visible: false },
+            { property: 'user', label: 'Usuário', type: 'columnTemplate' },
             { property: 'title', label: 'Título', type: 'string' },
-            { property: 'date', label: 'Data', type: 'date', format: 'mediumDate' },
+            { property: 'date', label: 'Data', type: 'columnTemplate' },
             { property: 'value', label: 'Valor', type: 'currency', format: 'BRL' },
-            { property: 'paid', label: 'Pago', type: 'boolean' }
+            { property: 'paid', label: 'Pago', type: 'cellTemplate' }
         ];
     }
 
     getItems(currentPage: number, pageSize: number): void {
+        let resultPages: any;
+
         this.isLoading = true;
         this.paymentItems = [];
         this.currentPage = currentPage;
@@ -98,8 +106,18 @@ export class PaymentListComponent implements OnInit {
         this.paymentSubscriptionGet$ = this.paymentService
             .get(this.disclaimers, currentPage, pageSize)
             .subscribe({
-                next: (response: Array<Payment>) => {
-                    this.paymentItems = [...this.paymentItems, ...response];
+                next: (response: any) => {
+                    this.totalItems = response.headers.get('X-Total-Count');
+
+                    resultPages = this.totalItems / pageSize;
+                    
+                    this.totalPages = [];
+
+                    for (let i = 1; i <= Math.ceil(resultPages); i++) {
+                        this.totalPages.push(i);
+                    }
+
+                    this.paymentItems = [...this.paymentItems, ...response.body];
                     this.isLoading = false;
                 },
                 error: (error: any) => {
@@ -109,7 +127,7 @@ export class PaymentListComponent implements OnInit {
             });
     }
 
-    savePayment(payment: any) {
+    savePayment(payment: Payment) {
         if (this.advancedFilterForm.valid) {
             if (this.editRegister) {
                 this.paymentSubscriptionUpdate$ = this.paymentService.update(this.paymentId, payment).subscribe({
@@ -123,6 +141,8 @@ export class PaymentListComponent implements OnInit {
                 
                 return;
             }
+
+            payment.paid = false;
 
             this.paymentSubscriptionPost$ = this.paymentService.post(payment).subscribe({
                 next: () => {
@@ -140,14 +160,27 @@ export class PaymentListComponent implements OnInit {
     }
 
     editPayment(register: Payment) {
+        let payment: any = register;
+        payment.date = formatDate(register.date, 'yyyy-MM-dd', 'pt')
+
         this.paymentId = register.id;
         this.editRegister = true;
-        this.advancedFilterForm.patchValue(register);
+
+        this.advancedFilterForm.patchValue(payment);
         this.newPayment.open();
     }
 
-    isParent(row: any, index: number) {
-		return row.user === null;
+    onPaidChecked(value: Payment) {
+        value.paid = !value.paid
+
+        this.paymentSubscriptionUpdate$ = this.paymentService.put(value.id, value).subscribe({
+            next: () => {
+                this.poNotification.success('Pagamento alterado com sucesso!');
+                this.newPayment.close();
+                this.getItems(1, this.pageSize);
+            },
+            error: () => this.poNotification.error('Verifique sua conexão!'),
+        });
 	}
 
     excludePayment(payment: Payment) {

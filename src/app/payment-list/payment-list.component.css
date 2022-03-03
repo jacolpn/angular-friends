@@ -32,7 +32,15 @@ h2 {
     padding: 10px 40px 10px 10px;
 }
 
+.display-grid {
+    display: grid;
+}
+
 .container-combo-box {
     display: flex;
     justify-content: end;
+}
+
+.color-gray {
+    color: var(--color-text-gray);
 }

@@ -46,15 +46,15 @@
                         <li class="page-item">
                             <po-button p-type="link" p-label="&laquo;" (p-click)="onChangePagination('previous')"></po-button>
                         </li>
-                        <li class="page-item">
-                            <po-button [p-type]="currentPage === 1 ? 'primary' : 'link'" p-label="1" (p-click)="getItems(1, pageSize)"></po-button>
+                        <li *ngFor="let page of totalPages" class="page-item">
+                            <po-button
+                                [p-type]="currentPage === page ? 'primary' : 'link'"
+                                [p-label]="page"
+                                (p-click)="getItems(page, pageSize)"
+                            >
+                            </po-button>
                         </li>
-                        <li class="page-item">
-                            <po-button [p-type]="currentPage === 2 ? 'primary' : 'link'" p-label="2" (p-click)="getItems(2, pageSize)"></po-button>
-                        </li>
-                        <li class="page-item">
-                            <po-button [p-type]="currentPage === 3 ? 'primary' : 'link'" p-label="3" (p-click)="getItems(3, pageSize)"></po-button>
-                        </li>
+                        <po-icon></po-icon>
                         <li class="page-item">
                             <po-button p-type="link" p-label="&raquo;" (p-click)="onChangePagination('next')"></po-button>
                         </li>
@@ -63,12 +63,30 @@
 
                 <po-table
                     [p-sort]="true"
+					[p-striped]="true"
                     [p-actions]="tableActions"
                     [p-columns]="paymentColumns"
                     [p-items]="paymentItems"
                     [p-loading]="isLoading"
                     [p-hide-columns-manager]="true"
                 >
+                    <ng-template p-table-cell-template let-value let-row="row">
+                        <po-checkbox (p-change)="onPaidChecked(row)" [ngModel]="row.paid"></po-checkbox>
+                    </ng-template>
+                    
+                    <ng-template p-table-column-template p-property="user" let-value let-i="rowIndex">
+                        <div class="display-grid po-pt-2">
+                            <span [innerText]="value"></span>
+                            <span class="po-font-text-small color-gray po-pb-2" [innerText]="'@picpay'"></span>
+                        </div>
+                    </ng-template>
+
+                    <ng-template p-table-column-template p-property="date" let-value let-i="rowIndex">
+                        <div class="display-grid po-pt-2">
+                            <span [innerText]="value | date : 'mediumDate'"></span>
+                            <span class="po-font-text-small color-gray po-pb-2" [innerText]="value | date : 'shortTime'"></span>
+                        </div>
+                    </ng-template>
                 </po-table>
             </div>
         </div>

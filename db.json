@@ -16,7 +16,7 @@
       "id": 1,
       "user": "Jackson Neves",
       "title": "Professor 1",
-      "date": "2020-06-20",
+      "date": "2020-06-20 10:00",
       "value": 100,
       "paid": true
     },
@@ -24,7 +24,7 @@
       "id": 2,
       "user": "João Andrade",
       "title": "Professor 2",
-      "date": "2020-06-20",
+      "date": "2020-06-20 10:00",
       "value": 100,
       "paid": false
     },
@@ -32,72 +32,73 @@
       "id": 3,
       "user": "Kleber Freitas",
       "title": "Professor 3",
-      "date": "2020-06-20",
+      "date": "2020-06-20 10:00",
       "value": 100,
       "paid": true
     },
     {
       "user": "Kleber Freitas",
       "value": 100,
-      "date": "2020-06-20",
+      "date": "2020-06-20 10:00",
       "title": "Professor 3",
-      "id": 4
+      "id": 4,
+      "paid": true
     },
     {
       "user": "Kleber Freitas",
       "value": 100,
-      "date": "2020-06-20",
+      "date": "2020-06-20 10:00",
       "title": "Professor 3",
-      "id": 5
+      "id": 5,
+      "paid": true
     },
     {
       "user": "Kleber Freitas",
       "value": 100,
-      "date": "2020-06-20",
+      "date": "2022-03-09",
       "title": "Professor 3",
-      "id": 6
+      "id": 6,
+      "paid": true
     },
     {
       "user": "Kleber Freitas",
       "value": 100.99,
-      "date": "2020-06-20",
+      "date": "2020-06-20 10:00",
       "title": "Professor 3",
-      "id": 7
+      "id": 7,
+      "paid": true
     },
     {
       "user": "Kleber Freitas",
       "value": 100,
-      "date": "2020-06-20",
+      "date": "2020-06-20 10:00",
       "title": "Professor 3",
-      "id": 8
+      "id": 9,
+      "paid": false
     },
     {
       "user": "Kleber Freitas",
       "value": 100,
-      "date": "2020-06-20",
+      "date": "2020-06-20 10:00",
       "title": "Professor 3",
-      "id": 9
+      "id": 10,
+      "paid": false
     },
     {
       "user": "Kleber Freitas",
       "value": 100,
-      "date": "2020-06-20",
+      "date": "2020-06-20 10:00",
       "title": "Professor 3",
-      "id": 10
-    },
-    {
-      "user": "Kleber Freitas",
-      "value": 100,
-      "date": "2020-06-20",
-      "title": "Professor 3",
-      "id": 11
+      "id": 11,
+      "paid": false
     },
     {
       "user": "Jackson Neves",
       "value": 100.13,
-      "date": "2020-06-20",
+      "date": "2020-06-20 10:00",
       "title": "Professor 1",
-      "id": 12
+      "id": 12,
+      "paid": false
     }
   ]
 }

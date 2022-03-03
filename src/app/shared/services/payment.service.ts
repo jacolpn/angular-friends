@@ -20,7 +20,7 @@ export class PaymentService {
 			url = `${url}&${filters}`;
 		}
 
-		return this.http.get<Payment>(url);
+		return this.http.get<Payment>(url, { observe: 'response' });
 	}
 
 	post(params: Payment): Observable<any> {
@@ -28,6 +28,10 @@ export class PaymentService {
 	}
 
     update(id: string, body: Payment): Observable<string> {
+        return this.http.patch<any>(`${this.apiUrl}/${id}`, body);
+    }
+
+	put(id: string, body: any): Observable<string> {
         return this.http.put<any>(`${this.apiUrl}/${id}`, body);
     }
 
