@@ -1,41 +1,42 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
 import { API } from 'src/app/app.api';
 
-import { Payment } from '../interfaces/payment.interface';
+import { IPayment } from '../interfaces/payment.interface';
 
 @Injectable()
 export class PaymentService {
-	private apiUrl = `${API}/payments`;
+	private apiUrl = `${API}/tasks`;
 
 	constructor(private http: HttpClient) { }
 
 	get(filters: string, currentPage: number, pageSize: number): any {
 		let url: string;
-		url = `${this.apiUrl}?_page=${currentPage}&_limit=${pageSize}`;
+		url = `${this.apiUrl}?_sort=id&_order=desc&_page=${currentPage}&_limit=${pageSize}`;
 
-		if (filters && filters.length > 0) {
-			url = `${url}&${filters}`;
+		if (filters !== '') {
+			url = `${url}${filters}`;
 		}
 
-		return this.http.get<Payment>(url, { observe: 'response' });
+		return this.http.get<IPayment>(url, { observe: 'response' });
 	}
 
-	post(params: Payment): Observable<any> {
+	post(params: IPayment): Observable<any> {
 		return this.http.post<any>(this.apiUrl, params);
 	}
 
-    update(id: string, body: Payment): Observable<string> {
+    patch(id: number, body: IPayment): Observable<IPayment> {
         return this.http.patch<any>(`${this.apiUrl}/${id}`, body);
     }
 
-	put(id: string, body: any): Observable<string> {
+	put(id: number, body: any): Observable<IPayment | any> {
         return this.http.put<any>(`${this.apiUrl}/${id}`, body);
     }
 
-	delete(id: String): Observable<string> {
+	delete(id: string | number) {
         return this.http.delete<any>(`${this.apiUrl}/${id}`);
     }
 }

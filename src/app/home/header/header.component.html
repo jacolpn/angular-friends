@@ -1,0 +1,15 @@
+<nav class="navbar">
+    <div class="navbar__container">
+        <img src="../../assets/images/logo.svg" class="cursor-pointer h-2/4">
+
+        <po-avatar
+            p-size="sm"
+            p-src="../../assets/images/profile.svg"
+            p-loading="lazy"
+            (p-click)="profile.openModal()"
+        >
+        </po-avatar>
+    </div>
+</nav>
+
+<app-profile #profile></app-profile>

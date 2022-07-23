@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    section {
+        @apply
+            bg-[#F2F2F2]
+            min-h-[90vh]
+            pb-8
+        ;
+    }
+
+    .wrapper {
+        @apply
+            flex
+            justify-center
+            items-center
+        ;
+    }
+
+    .container {
+        @apply w-[95%];
+    }
+
+    .container__title {
+        @apply
+            text-3xl
+            text-[#333333]
+            font-semibold
+            mb-2
+            mt-7
+        ;
+    }
+
+    .container__button {
+        @apply
+            bg-[#007DFE]
+            hover:bg-[#0050fe]
+            text-[#FFFFFF]
+            px-4
+            py-1
+            rounded
+            text-sm
+            font-normal
+        ;
+    }
+
+    .table__container {
+        @apply
+            bg-[#FFF]
+            rounded-lg
+        ;
+    }
+
+    .table__header {
+        @apply
+            flex
+            sm:grid
+            justify-between
+            pl-3
+            pr-10
+            py-3
+            sm:p-2
+        ;
+    }
+
+    .table__header_combo {
+        @apply
+            flex
+            justify-end
+        ;
+    }
+
+    .page__button_parameters {
+        @apply
+            bg-[#F5F5F5]
+            hover:bg-[#e9ebf5]
+            text-[#333333]
+            px-4
+            py-2
+            ml-2
+            rounded-md
+            text-xs
+            font-semibold
+            cursor-pointer
+            flex
+            justify-center
+            items-center
+        ;
+    }
+}

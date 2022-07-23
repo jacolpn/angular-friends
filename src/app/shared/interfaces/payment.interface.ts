@@ -1,8 +1,11 @@
-export interface Payment {
-    id: string;
-    user: string;
+export interface IPayment {
+    id: number;
+    name: string;
+    username: string;
     title: string;
-    date: Date;
-    value: number;
-    paid: boolean;
+    value: number | any;
+    date: Date | string;
+    image: string;
+    isPayed: boolean;
+    action: boolean;
 }

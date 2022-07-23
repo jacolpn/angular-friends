@@ -1,0 +1,97 @@
+<section>
+    <div class="wrapper">
+        <div class="container">
+            <h2 class="container__title">{{ 'myPayments' | translate }}</h2>
+
+            <div class="text-end mb-3">
+                <button type="button" class="container__button" (click)="addPayment()">
+                    {{ 'addPayment' | translate }}
+                </button>
+            </div>
+
+            <div class="table__container">
+                <div class="table__header">
+                    <div class="flex items-center sm:justify-center">
+                        <po-input
+                            p-clean
+                            class="po-md-7 po-pr-0 po-pl-0"
+                            p-icon="po-icon-search"
+                            p-placeholder="{{ 'placeholderSearchUser' | translate }}"
+                            [(ngModel)]="userSearch"
+                            (appAction)="onChangeDisclaimer(this.userSearch, 'simple')"
+                        >
+                        </po-input>
+
+                        <div class="page__button_parameters" (click)="onChangeDisclaimer(this.userSearch, 'simple')">
+                            {{ 'placeholderFilters' | translate }}
+                        </div>
+
+                        <div class="page__button_parameters w-36" (click)="advanced.openModal()">
+                            <i class="po-icon po-icon-parameters mr-1"></i>
+                            {{ 'advancedFilter' | translate }}
+                        </div>
+                    </div>
+
+                    <p-paginator
+                        [rows]="pageSize"
+                        [totalRecords]="totalPages"
+                        [rowsPerPageOptions]="[5, 10, 15]"
+                        (onPageChange)="onChangePagination($event)"
+                    >
+                    </p-paginator>
+                </div>
+
+                <po-disclaimer-group
+                    [p-disclaimers]="disclaimer"
+                    [p-hide-remove-all]="true"
+                    (p-remove)="changeEvent($event)"
+                >
+                </po-disclaimer-group>
+
+                <po-table
+                    [p-sort]="true"
+					[p-striped]="true"
+                    [p-columns]="paymentColumns"
+                    [p-items]="paymentItems"
+                    [p-loading]="isLoading"
+                    [p-hide-columns-manager]="true"
+                >
+                    <ng-template p-table-cell-template let-value let-column="column" let-row="row">
+                        <po-checkbox
+                            *ngIf="column.property === 'isPayed'"
+                            [ngModel]="row.isPayed"
+                            (p-change)="onPaidChecked(row)"
+                        >
+                        </po-checkbox>
+
+                        <div *ngIf="column.property === 'name'" class="grid po-pt-2">
+                            <span [innerText]="row.name"></span>
+                            <span
+                                class="po-font-text-small text-[#69788C] po-pb-2"
+                                [innerText]="'@' + row.username"
+                            >
+                            </span>
+                        </div>
+                    </ng-template>
+
+                    <ng-template p-table-column-template p-property="date" let-value let-i="rowIndex">
+                        <div class="grid po-pt-2">
+                            <span [innerText]="value | date : 'mediumDate'"></span>
+                            <span
+                                class="po-font-text-small text-[#69788C] po-pb-2"
+                                [innerText]="value | date : 'h:mm a'"
+                            >
+                            </span>
+                        </div>
+                    </ng-template>
+                </po-table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<app-advanced-filter #advanced (filter)="onClickAdvancedFilter($event)"></app-advanced-filter>
+
+<app-registration #register [edit]="editRegister" (save)="savePayment($event)"></app-registration>
+
+<app-modal #modalDelete (save)="excludePayment($event)"></app-modal>

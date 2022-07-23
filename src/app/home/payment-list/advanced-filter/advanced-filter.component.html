@@ -1,0 +1,40 @@
+<po-modal #advancedFilterModal p-size="sm" p-title="{{ 'advancedFilter' | translate }}">
+    <po-input
+        p-clean
+        p-placeholder="{{ 'user' | translate }}"
+        class="po-md-6 pl-0 ml-0"
+        [(ngModel)]="userSearchAdvanced"
+    >
+    </po-input>
+
+    <po-input
+        p-clean
+        class="po-md-6 pr-0 mr-0"
+        p-placeholder="{{ 'title' | translate }}"
+        [(ngModel)]="titleSearchAdvanced"
+    >
+    </po-input>
+
+    <po-datepicker
+        p-clean
+        class="po-md-6 pl-0 ml-0"
+        p-format="dd/mm/yyyy"
+        p-placeholder="{{ 'date' | translate }}"
+        [(ngModel)]="dateSearchAdvanced"
+    >
+    </po-datepicker>
+
+    <po-input
+        class="po-md-6 pr-0 mr-0"
+        p-clean
+        p-placeholder="{{ 'nickname' | translate }}"
+        [(ngModel)]="usernameSearchAdvanced"
+    >
+    </po-input>
+
+    <po-modal-footer [p-disabled-align]="false">
+        <button type="button" class="button__primary" (click)="onClickSearch()">
+            {{ 'applyFilters' | translate }}
+        </button>
+    </po-modal-footer>
+</po-modal>

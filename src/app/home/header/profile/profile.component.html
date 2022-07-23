@@ -1,0 +1,71 @@
+<po-modal #profile p-size="md" p-title="{{ 'myProfile' | translate }}">
+    <div class="modal__profile">
+        <po-avatar
+            class="flex items-center justify-center"
+            p-size="lg"
+            p-src="../../assets/images/profile.svg"
+            p-loading="lazy"
+        >
+        </po-avatar>
+
+        <p id="user" class="font-bold text-xl">{{ user[0].value }}</p>
+        <p id="name" class="text-gray-500 text-sm">{{ user[2].value }}</p>
+
+        <div class="grid text-left mt-6">
+            <p class="profile__title">{{ 'myAccountUpperCase' | translate }}</p>
+
+            <div
+                *ngFor="let item of user; let i = index"
+                class="profile__paragraph"
+                [ngClass]="
+                    item.property === 'logout'
+                        ? 'text-red-500 hover:bg-red-100 cursor-pointer'
+                        : item.property === 'password' && 'cursor-pointer'
+                "
+                (click)="item.property === 'logout' && onHandleParagraph(item.property)"
+            >
+                <p>{{ item.label }}</p>
+
+                <div>
+                    <p
+                        class="text-gray-500"
+                        *ngIf="item.property !== 'password' || !showEditPassword"
+                        (click)="onHandleParagraph(item.property)"
+                    >
+                        <span [id]="'paragraph-' + i">{{ item.value }}</span>
+
+                        <i class="po-icon po-icon-edit ml-2 text-sky-800" *ngIf="item.property === 'password'"></i>
+                    </p>
+
+                    <div *ngIf="item.property === 'password' && showEditPassword" class="po-row flex items-center justify-end sm:grid">
+                        <po-password
+                            id="password"
+                            name="password"
+                            class="po-md-4 po-pr-0"
+                            p-placeholder="{{ 'newPassword' | translate }}"
+                            [(ngModel)]="newPassword"
+                        >
+                        </po-password>
+                        <po-password
+                            id="passwordAgain"
+                            name="passwordAgain"
+                            class="po-md-4 po-pr-0"
+                            p-placeholder="{{ 'newPassword' | translate }}"
+                            [(ngModel)]="newPasswordAgain"
+                        >
+                        </po-password>
+
+                        <div class="flex ml-1 sm:justify-end">
+                            <button type="button" class="button__primary" (click)="changePassword()">
+                                {{ 'change' | translate }}
+                            </button>
+                            <i class="po-icon po-icon-delete button__secondary" (click)="onHandleParagraph(item.property)"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <po-modal-footer [p-disabled-align]="false"></po-modal-footer>
+</po-modal>

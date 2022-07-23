@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .modal__profile {
+        @apply grid items-center text-center;
+    }
+
+    .profile__title {
+        @apply
+            border-dotted
+            border-b
+            pb-1
+            border-gray-300
+            text-xs
+            text-gray-500
+            font-semibold
+        ;
+    }
+
+    .profile__paragraph {
+        @apply
+            border-dotted
+            flex border-b
+            py-1
+            border-gray-300
+            justify-between
+            hover:bg-sky-100
+        ;
+    }
+
+    .button__primary {
+        @apply
+            bg-[#007DFE]
+            hover:bg-[#0050fe]
+            text-[#FFFFFF]
+            px-3
+            ml-1
+            h-8
+            rounded
+            text-sm
+            font-normal
+            sm:ml-0
+        ;
+    }
+
+    .button__secondary {
+        @apply
+            ml-1
+            h-8
+            p-1
+            rounded
+            flex
+            items-center
+            justify-center
+            text-[#333333]
+            bg-[#F5F5F5]
+            hover:bg-[#e9ebf5]
+        ;
+    }
+}

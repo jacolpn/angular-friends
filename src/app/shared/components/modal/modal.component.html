@@ -1,0 +1,21 @@
+<po-modal
+    #modal
+    p-size="sm"
+    p-title="{{ 'deletePayment' | translate }}"
+>
+    <p *ngFor="let item of paragraph; let i = index">
+        <span [id]="'label' + i">{{ item.label }}:</span>
+        <span [id]="'value' + i" *ngIf="!item.format" class="ml-2">{{ item.value }}</span>
+        <span [id]="'value' + i" *ngIf="item.format === 'date'" class="ml-2">{{ item.value | date:'dd/MM/yyyy' }}</span>
+        <span [id]="'value' + i" *ngIf="item.format === 'currency'" class="ml-2">{{ item.value | currency:'BRL' }}</span>
+    </p>
+
+    <po-modal-footer [p-disabled-align]="false">
+        <button type="button" class="button__secondary" (click)="closeModal()">
+            {{ 'cancel' | translate }}
+        </button>
+        <button type="button" class="button__primary" (click)="onSave(paragraph[0].id)">
+            {{ 'confirm' | translate }}
+        </button>
+    </po-modal-footer>
+</po-modal>

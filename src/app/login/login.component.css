@@ -1,50 +1,72 @@
-.wrapper {
-    display: flex;
-    justify-content: space-between;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.container-form {
-    background-color: var(--color-background-gray);
-    width: 30vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-h1 {
-    font-size: 24px;
-    color: var(--color-blue-light);
-    font-weight: 400;
-}
-
-.title-bold-login {
-    color: var(--color-blue-dark);
-    font-weight: 900;
-}
-
-h2 {
-    font-size: 30px;
-    color: var(--color-text-black);
-    font-weight: 600;
-}
-
-.container-image {
-    width: 70vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-@media (max-width: 900px) {
-    .container-form {
-        width: 100vw;
+@layer components {
+    .wrapper {
+        @apply
+            flex
+            justify-between
+            m-0
+            p-0
+            h-screen
+            w-screen
+        ;
     }
 
-    .container-image {
-        display: none;
+    .form {
+        @apply
+            bg-[#F2F2F2]
+            w-[30vw]
+            flex
+            justify-center
+            items-center
+            sm:w-[100vw]
+        ;
+    }
+
+    .form__title {
+        @apply
+            text-xl
+            text-[#2f82dd]
+            font-normal
+        ;
+    }
+
+    .form__title_bold {
+        @apply
+            text-[#002d69]
+            font-black
+        ;
+    }
+
+    .form__subtitle {
+        @apply
+            text-2xl
+            text-[#333333]
+            font-semibold
+        ;
+    }
+
+    .form__button {
+        @apply
+            bg-[#007DFE]
+            hover:bg-[#0050fe]
+            text-[#FFFFFF]
+            p-1
+            rounded
+            text-sm
+            font-normal
+        ;
+    }
+
+    .image {
+        @apply
+            w-[70vw]
+            flex
+            justify-center
+            items-center
+            sm:hidden
+        ;
     }
 }

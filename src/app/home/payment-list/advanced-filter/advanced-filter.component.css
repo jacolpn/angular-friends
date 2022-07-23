@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .button__primary {
+        @apply
+            bg-[#007DFE]
+            hover:bg-[#0050fe]
+            text-[#FFFFFF]
+            px-4
+            py-1
+            rounded
+            text-sm
+            font-normal
+        ;
+    }
+}

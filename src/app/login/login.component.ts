@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import { TranslateService } from '@ngx-translate/core';
 import { PoNotificationService } from '@po-ui/ng-components';
+
 import { Subscription } from 'rxjs';
 
-import { Login } from '../shared/interfaces/login.interface';
+import { IUser } from '../shared/interfaces/user.interface';
 
 import { UserService } from '../shared/services/user.service';
 
@@ -15,12 +18,13 @@ import { UserService } from '../shared/services/user.service';
 })
 export class LoginComponent implements OnInit, OnDestroy {
     formLogin: FormGroup;
-    userSubscription$: Subscription | undefined;
+    subscription$: Subscription[] = [];
 
     constructor(
-        private route: Router,
+        private router: Router,
         private userService: UserService,
         private poNotification: PoNotificationService,
+        private translate: TranslateService,
 		private formBuilder: FormBuilder
     ) {
         this.formLogin = this.formBuilder.group({
@@ -34,30 +38,29 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     login() {
-        let filter = `email=${this.formLogin.value.email}&password=${this.formLogin.value.password}`;
+        const filter = `email=${this.formLogin.value.email}&password=${this.formLogin.value.password}`;
 
-        this.userSubscription$ = this.userService.get(filter).subscribe({
-            next: (response: Array<Login>) => {
-                console.log(response)
+        this.subscription$.push(this.userService.get(filter).subscribe({
+            next: (response: Array<IUser>) => {
                 if (response.length > 0) {
                     this.userService.permission = true;
-                    this.userService.email = response[0].email;
-                    this.poNotification.success('Bem vindo!');
-                    this.route.navigate(['/payments']);
+                    this.userService.user = response[0];
+                    this.poNotification.success(this.translate.instant('welcome'));
+                    this.router.navigate(['/home']);
 
                     return;
                 }
 
                 this.userService.permission = false;
-                this.poNotification.error('Usuário ou senha inválido!')
+                this.poNotification.error(this.translate.instant('invalidUserPassword'));
             },
-            error: () => this.poNotification.error('Verifique sua conexão!'),
-        });
+            error: () => this.poNotification.error(this.translate.instant('errorConnection')),
+        }));
     }
 
     ngOnDestroy(): void {
-        if (this.userSubscription$ !== undefined) {
-            this.userSubscription$.unsubscribe();
-        }
+        if (this.subscription$ !== undefined) {
+			this.subscription$.forEach((sub: Subscription) => sub.unsubscribe());
+		}
     }
 }

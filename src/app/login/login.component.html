@@ -1,13 +1,16 @@
 <section class="wrapper">
-    <div class="container-form">
+    <div class="form">
         <form [formGroup]="formLogin">
-            <h1><strong class="title-bold-login">Pay</strong>Friends</h1>
+            <h1 class="form__title">
+                <strong class="form__title_bold">Pay</strong>Friends
+            </h1>
 
-            <h2>Bem vindo de volta</h2>
+            <h2 class="form__subtitle">{{ 'welcomeBack' | translate }}</h2>
 
-            <div class="mb-3">
+            <div class="mb-2">
                 <po-input
                     p-clean
+                    id="email"
                     formControlName="email"
                     p-icon="po-icon-user"
                     p-placeholder="Email"
@@ -19,17 +22,25 @@
             <div class="mb-3">
                 <po-password
                     name="password"
-                    p-placeholder="Senha"
+                    id="password"
+                    class="passwords"
+                    p-placeholder="{{ 'password' | translate }}"
                     formControlName="password"
                 >
                 </po-password>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-sm col-12" (click)="login()">ENTRAR</button>
+            <button
+                type="submit"
+                class="form__button po-md-12"
+                (click)="login()"
+            >
+                {{ 'logIn' | translate }}
+            </button>
           </form>
     </div>
 
-    <div class="container-image">
-        <img src="../../assets/images/logo-login.png">
+    <div class="image">
+        <img src="../../assets/images/image-login.svg">
     </div>
 </section>

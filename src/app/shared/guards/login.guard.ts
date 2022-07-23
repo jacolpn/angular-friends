@@ -7,11 +7,11 @@ import { UserService } from '../services/user.service';
     providedIn: 'root'
 })
 export class LoginGuard implements CanActivate {
-    constructor(private userService: UserService, private route: Router) { }
+    constructor(private userService: UserService, private router: Router) { }
 
     canActivate(): boolean {
         if (!this.userService.permission) {
-            this.route.navigate(['/']);
+            this.router.navigate(['/']);
         }
 
         return this.userService.permission;

@@ -1,14 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import { Observable } from 'rxjs';
+
 import { API } from 'src/app/app.api';
-import { Login } from '../interfaces/login.interface';
+
+import { IUser } from '../interfaces/user.interface';
 
 @Injectable()
 export class UserService {
-	public permission: boolean = false;
-	public email: string = '';
-	private apiUrl = `${API}/users`;
+	public permission: boolean;
+	public user: IUser;
+
+	private apiUrl = `${API}/account`;
 
 	constructor(private http: HttpClient) { }
 
@@ -17,9 +21,13 @@ export class UserService {
 		url = `${this.apiUrl}`;
 
 		if (filters && filters.length > 0) {
-			url = `${url}/?${filters}`;
+			url = `${url}?${filters}`;
 		}
 
-		return this.http.get<Login>(url);
+		return this.http.get<IUser>(url);
 	}
+
+    patch(id: number, body: any): Observable<IUser | any> {
+        return this.http.patch<any>(`${this.apiUrl}/${id}`, body);
+    }
 }
