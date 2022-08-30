@@ -3,13 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from './home.component';
 
-import { LoginGuard } from '../shared/guards/login.guard';
+import { AuthGuard } from '../shared/guards/auth.guard';
 
 const routes: Routes = [
     {
         path: '',
         component: HomeComponent,
-        canActivate: [LoginGuard]
+        canActivate: [AuthGuard]
     }
 ];
 

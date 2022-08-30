@@ -5,6 +5,7 @@ import { PoNotificationService } from '@po-ui/ng-components';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
+import { LocalStorageService } from './../../../shared/services/local-storage.service';
 import { UserService } from './../../../shared/services/user.service';
 
 import { IUser } from './../../../shared/interfaces/user.interface';
@@ -29,12 +30,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
         private userService: UserService,
         private router: Router,
         private translate: TranslateService,
-        private poNotification: PoNotificationService
+        private poNotification: PoNotificationService,
+        private storage: LocalStorageService
     ) { }
 
     ngOnInit(): void {
         this.newPassword = '';
         this.newPasswordAgain = '';
+        this.informationProfile();
+
+        if (!this.properties) {
+            this.getProfile()
+        }
+    }
+
+    informationProfile() {
         this.properties = this.userService.user;
         this.user = [
             { property: 'user', label: this.translate.instant('myPicpay'), value: this.properties?.user },
@@ -54,6 +64,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             case 'logout':
                 this.profile.close();
                 this.userService.permission = false;
+                this.storage.remove('auth-friends');
 
                 return this.router.navigate(['/']);
             case 'password':
@@ -75,13 +86,28 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
 
         this.subscription$.push(this.userService.patch(this.properties.id, { password: this.newPassword }).subscribe({
-                next: (res: any) => {
-                    this.resetFields();
-                    this.poNotification.success(this.translate.instant('changePasswordSuccess'));
-                },
-                error: () => this.poNotification.error(this.translate.instant('errorConnection')),
-            })
-        );
+            next: () => {
+                this.resetFields();
+                this.poNotification.success(this.translate.instant('changePasswordSuccess'));
+            },
+            error: () => this.poNotification.error(this.translate.instant('errorConnection')),
+        }));
+    }
+
+    getProfile() {
+        let filter = 'email=' + this.storage.get('auth-friends');
+
+        this.subscription$.push(this.userService.get(filter).subscribe({
+            next: (res: Array<IUser>) => {
+                if (res.length > 0) {
+                    this.userService.user = res[0];
+                    this.informationProfile();
+
+                    return;
+                }
+            },
+            error: () => this.poNotification.error(this.translate.instant('errorConnection')),
+        }));
     }
 
     resetFields() {

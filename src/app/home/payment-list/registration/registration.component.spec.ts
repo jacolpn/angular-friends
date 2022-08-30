@@ -106,6 +106,22 @@ describe(RegistrationComponent.name, () => {
         expect(component['poNotification'].error).not.toHaveBeenCalled();
     });
 
+    it(`onSave: Should return error when value is less than zero`, () => {
+        spyOn(component['poNotification'], 'error');
+
+        component.advancedFilterForm.patchValue({
+            value: -1,
+            date: new Date(),
+            name: 'Jackson',
+            username: 'Neves',
+            title: 'Picpay'
+        });
+
+        component.onSave(payment);
+
+        expect(component['poNotification'].error).toHaveBeenCalled();
+    });
+
     // Problema no formControlName.
     xit('(D) Should display title add when edit propertie is false', () => {
         component.openModal();

@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 
 import { IUser } from '../shared/interfaces/user.interface';
 
+import { LocalStorageService } from '../shared/services/local-storage.service';
 import { UserService } from '../shared/services/user.service';
 
 @Component({
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private userService: UserService,
         private poNotification: PoNotificationService,
         private translate: TranslateService,
-		private formBuilder: FormBuilder
+		private formBuilder: FormBuilder,
+        private storage: LocalStorageService
     ) {
         this.formLogin = this.formBuilder.group({
 			email: [{ value: '', disabled: false, require: true }],
@@ -47,6 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.userService.user = response[0];
                     this.poNotification.success(this.translate.instant('welcome'));
                     this.router.navigate(['/home']);
+                    this.storage.set('auth-friends', response[0].email)
 
                     return;
                 }

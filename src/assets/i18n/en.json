@@ -20,6 +20,7 @@
     "paymentAddedSuccess": "Payment registered successfully!",
     "paymentDeletedSuccess": "Payment successfully removed!",
     "pleaseFillInFields": "Please fill in all fields!",
+    "valueLessThanZero": "The value must be greater than zero!",
     "advancedFilter": "Advanced filter",
     "applyFilters": "Apply filters",
     "edit": "Edit",

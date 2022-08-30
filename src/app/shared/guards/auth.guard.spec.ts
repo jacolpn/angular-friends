@@ -3,13 +3,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
+import { LocalStorageService } from '../services/local-storage.service';
 import { UserService } from '../services/user.service';
 
-import { LoginGuard } from './login.guard';
+import { AuthGuard } from './auth.guard';
 
-describe(LoginGuard.name, () => {
-    let guard: LoginGuard;
+describe(AuthGuard.name, () => {
+    let guard: AuthGuard;
     let service: UserService;
+    let storage: LocalStorageService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -23,8 +25,9 @@ describe(LoginGuard.name, () => {
             ],
         });
 
-        guard = TestBed.inject(LoginGuard);
+        guard = TestBed.inject(AuthGuard);
         service = TestBed.inject(UserService);
+        storage = TestBed.inject(LocalStorageService);
     });
 
     it('Should create guard', () => {
@@ -34,8 +37,9 @@ describe(LoginGuard.name, () => {
     it('Should navigate to login when do not have permission', () => {
         spyOn(guard['router'], 'navigate');
 
-        expect(guard.canActivate()).toBeFalsy();
+        service.permission = false;
 
+        expect(guard.canActivate()).toBeFalsy();
         expect(guard['router'].navigate).toHaveBeenCalledWith(['/']);
     });
 
@@ -43,6 +47,7 @@ describe(LoginGuard.name, () => {
         spyOn(guard['router'], 'navigate');
 
         service.permission = true;
+        storage.clear();
 
         expect(guard.canActivate()).toBeTruthy();
         expect(guard['router'].navigate).not.toHaveBeenCalled();

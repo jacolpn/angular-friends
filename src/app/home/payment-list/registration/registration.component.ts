@@ -56,6 +56,12 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     }
 
     onSave(payment: IPayment) {
+        if (this.advancedFilterForm.get('value').value < 0) {
+            this.poNotification.error(this.translate.instant('valueLessThanZero'));
+
+            return;
+        }
+
         if (this.advancedFilterForm.invalid) {
             this.poNotification.error(this.translate.instant('pleaseFillInFields'));
 

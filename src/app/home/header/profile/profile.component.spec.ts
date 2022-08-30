@@ -99,7 +99,7 @@ describe(ProfileComponent.name, () => {
         expect(spanName).toBeTruthy();
     });
 
-    it('changePassword: Shouldn return error when password is different', () => {
+    it(`changePassword: Shouldn't return error when password is different`, () => {
         spyOn(component['poNotification'], 'error');
 
         component.newPassword = 'teste';
@@ -110,7 +110,7 @@ describe(ProfileComponent.name, () => {
         expect(component['poNotification'].error).toHaveBeenCalled();
     });
 
-    it('changePassword: Shouldn return success when password is equal', () => {
+    it(`changePassword: Shouldn't return success when password is equal`, () => {
         spyOn(component['poNotification'], 'success');
 		spyOn(service, 'patch').and.returnValue(of(user));
 
@@ -126,7 +126,7 @@ describe(ProfileComponent.name, () => {
         expect(component['poNotification'].success).toHaveBeenCalled();
     });
 
-    it('changePassword: Shouldn return error when password is null', () => {
+    it(`changePassword: Shouldn't return error when password is null`, () => {
         spyOn(component['poNotification'], 'error');
 
         component.newPassword = '';
@@ -135,5 +135,22 @@ describe(ProfileComponent.name, () => {
         component.changePassword();
 
         expect(component['poNotification'].error).toHaveBeenCalled();
+    });
+
+    it(`getProfile: Shouldn't call when has properties`, () => {
+        spyOn(service, 'get').and.returnValue(of(user));
+        service.user = user;
+
+        fixture.detectChanges();
+
+        expect(service.get).not.toHaveBeenCalled();
+    });
+
+    it('getProfile: Should call when has not properties', () => {
+        spyOn(service, 'get').and.returnValue(of(user));
+
+        fixture.detectChanges();
+
+        expect(service.get).toHaveBeenCalled();
     });
 });

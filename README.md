@@ -1,19 +1,24 @@
-## Setup do projeto
-
-- Angular CLI: 12.1.4
-- Node: 12.20.2
+## **Setup do projeto:**
+- Angular CLI: 12.1.4 `ng --version`
+- Node: 12.20.2 `node -v`
 - Angular: 12.1.4
 
-## Como Rodar?
-
+## **Como Rodar?**
 - Instale as dependências usando o comando `npm install`
 - Na raiz do repositório, rode este comando `ng serve` para iniciar o servidor de desenvolvimento.
 - A Aplicação estará disponível na porta `http://localhost:4200/`
 
+### **Para rodar o Tailwind:**
+- `npm run build-css`
 
+### **Para rodar o Cypress:**
+- `npm run cypress-web`
 
-### **API**
+### **Generate build:**
+-  `ng build --prod --base-href="/"`
+<br/>
 
+## **API**
 **1 -** Como instalar? <br/>
 `npm install -g json-server`
 
@@ -36,33 +41,10 @@ Link para mais detalhes: https://github.com/typicode/json-server
 <br/>
 
 ### **Links úteis**:
-
-https://github.com/BeeTech-global/bee-stylish/tree/master/commits
-https://www.conventionalcommits.org/en/v1.0.0/
-
-
-## **Para rodar o Tailwind:**
-- npm run build-css
-
-## **Para rodar o Cypress:**
-- npm run cypress-web
-
-## Generate build:
-$ `ng build --prod --base-href="/"`
-
-## Angular CLI:
-$ `ng --version`
-$ `Angular CLI: 12.0.3`
-
-## NodeJS:
-$ `node -v`
-$ `v15.11.0`
-
-## JSON Server:
-$ `npm install -g json-server`
-$ `json-server .\db.json`
+- https://github.com/BeeTech-global/bee-stylish/tree/master/commits
+- https://www.conventionalcommits.org/en/v1.0.0/
+<br/>
 
 ### OBS:
-$ Em caso de erro ao inciar o projeto, deletar o `package-lock.json`.
-
-$ Biblioteca utilizada: [PO-UI](https://po-ui.io/)
+- Em caso de erro ao inciar o projeto, deletar o `package-lock.json`.
+- Biblioteca utilizada: [PO-UI](https://po-ui.io/)
