@@ -98,12 +98,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
         let filter = 'email=' + this.storage.get('auth-friends');
 
         this.subscription$.push(this.userService.get(filter).subscribe({
-            next: (res: Array<IUser>) => {
-                if (res.length > 0) {
-                    this.userService.user = res[0];
+            next: (res: IUser) => {
+                if (res) {
+                    this.userService.user = res;
                     this.informationProfile();
-
-                    return;
                 }
             },
             error: () => this.poNotification.error(this.translate.instant('errorConnection')),

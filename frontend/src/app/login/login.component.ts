@@ -40,16 +40,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     login() {
-        const filter = `email=${this.formLogin.value.email}&password=${this.formLogin.value.password}`;
+        const filter = `email=${this.formLogin.value.email}`;
 
         this.subscription$.push(this.userService.get(filter).subscribe({
-            next: (response: Array<IUser>) => {
-                if (response.length > 0) {
+            next: (response: IUser) => {
+                if (response && response.password === this.formLogin.value.password) {
                     this.userService.permission = true;
-                    this.userService.user = response[0];
+                    this.userService.user = response;
                     this.poNotification.success(this.translate.instant('welcome'));
                     this.router.navigate(['/home']);
-                    this.storage.set('auth-friends', response[0].email)
+                    this.storage.set('auth-friends', response.email)
 
                     return;
                 }
