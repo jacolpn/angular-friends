@@ -30,7 +30,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     ) {
         this.advancedFilterForm = this.formBuilder.group({
             name: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(50)])],
-            value: ['', Validators.compose([Validators.required])],
+            price: ['', Validators.compose([Validators.required])],
             title: ['', Validators.compose([Validators.minLength(1), Validators.maxLength(50)])],
             date: ['', Validators.compose([Validators.required])],
             username: ['']
@@ -56,7 +56,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     }
 
     onSave(payment: IPayment) {
-        if (this.advancedFilterForm.get('value').value < 0) {
+        if (this.advancedFilterForm.get('price').value < 0) {
             this.poNotification.error(this.translate.instant('valueLessThanZero'));
 
             return;

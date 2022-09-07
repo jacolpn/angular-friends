@@ -1,7 +1,7 @@
 <po-modal #newPayment p-title="{{ (edit ? 'editPayment' : 'addPaymentLowercase') | translate }}">
     <form [formGroup]="advancedFilterForm">
         <div class="p-fluid">
-            <div class="flex mb-4 mt-1 pr-0 mr-0 pl-0 ml-0 po-md-12">
+            <div class="flex mb-4 mt-1 pr-0 mr-0 pl-1 ml-0 po-md-12">
                 <input
                     id="name"
                     type="text"
@@ -14,7 +14,7 @@
                 <p-inputNumber
                     id="value"
                     class="po-md-6 h-8"
-                    formControlName="value"
+                    formControlName="price"
                     locale="pt-BR"
                     mode="currency"
                     currency="BRL"
@@ -23,7 +23,7 @@
                 </p-inputNumber>
             </div>
 
-            <div class="flex mb-4 pr-0 mr-0 pl-0 ml-0 po-md-12">
+            <div class="flex mb-4 pr-0 mr-0 pl-1 ml-0 po-md-12">
                 <input
                     id="title"
                     type="text"
@@ -48,7 +48,7 @@
                 </p-calendar>
             </div>
 
-            <div class="flex mb-4 pr-0 mr-0 pl-0 ml-0 po-md-6">
+            <div class="flex mb-4 mr-0 pl-1 ml-0 pr-1 po-md-6">
                 <input
                     id="username"
                     type="text"

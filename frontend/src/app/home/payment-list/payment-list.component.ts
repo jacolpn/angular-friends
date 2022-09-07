@@ -59,7 +59,7 @@ export class PaymentListComponent implements OnInit, OnDestroy {
             { property: 'name', label: this.translate.instant('user'), type: 'cellTemplate' },
             { property: 'title', label: this.translate.instant('title'), type: 'string' },
             { property: 'date', label: this.translate.instant('date'), type: 'columnTemplate' },
-            { property: 'value', label: this.translate.instant('value'), type: 'currency', format: 'BRL' },
+            { property: 'price', label: this.translate.instant('value'), type: 'currency', format: 'BRL' },
             { property: 'isPayed', label: this.translate.instant('paid'), type: 'cellTemplate', width: '100px' },
             {
                 property: 'action',
@@ -101,9 +101,9 @@ export class PaymentListComponent implements OnInit, OnDestroy {
             .get(this.disclaimers, currentPage, pageSize)
             .subscribe({
                 next: (response: any) => {
-                    this.totalPages = response.headers.get('X-Total-Count');
-
-                    this.paymentItems = [...this.paymentItems, ...response.body];
+                    // this.totalPages = response.headers.get('X-Total-Count');
+                    this.totalPages = response.body.total;
+                    this.paymentItems = [...this.paymentItems, ...response.body.items];
                     this.isLoading = false;
                 },
                 error: (error: any) => {
@@ -123,7 +123,7 @@ export class PaymentListComponent implements OnInit, OnDestroy {
         const payment: IPayment = register;
         payment.date = new Date(register.date);
 
-        this.paymentId = register.id;
+        this.paymentId = register.ID;
         this.editRegister = true;
         this.register.advancedFilterForm.patchValue(payment);
         this.register.openModal();
@@ -132,7 +132,7 @@ export class PaymentListComponent implements OnInit, OnDestroy {
     onPaidChecked(value: IPayment) {
         value.isPayed = !value.isPayed;
 
-        this.subscription$.push(this.paymentService.put(value.id, value).subscribe({
+        this.subscription$.push(this.paymentService.patch(value.ID, { isPayed: value.isPayed }).subscribe({
             next: () => {
                 this.register.closeModal();
                 this.getItems(1, this.pageSize);
@@ -148,7 +148,7 @@ export class PaymentListComponent implements OnInit, OnDestroy {
         if (this.editRegister) {
             this.editRegister = false;
 
-            this.subscription$.push(this.paymentService.patch(this.paymentId, payment).subscribe({
+            this.subscription$.push(this.paymentService.put(this.paymentId, payment).subscribe({
                 next: () => {
                     this.register.closeModal();
                     this.getItems(1, this.pageSize);
@@ -176,9 +176,9 @@ export class PaymentListComponent implements OnInit, OnDestroy {
 
     openModalDelete(payment: IPayment) {
         this.modalDelete.paragraph = [
-            { id: payment.id, label: this.translate.instant('user'), value: payment.name },
-            { id: payment.id, label: this.translate.instant('date'), value: payment.date, format: 'date' },
-            { id: payment.id, label: this.translate.instant('value'), value: payment.value, format: 'currency' }
+            { id: payment.ID, label: this.translate.instant('user'), value: payment.name },
+            { id: payment.ID, label: this.translate.instant('date'), value: payment.date, format: 'date' },
+            { id: payment.ID, label: this.translate.instant('value'), value: payment.price, format: 'currency' }
         ];
 
         this.modalDelete.openModal();
@@ -233,7 +233,7 @@ export class PaymentListComponent implements OnInit, OnDestroy {
                 this.advanced.titleSearchAdvanced = '';
             }
 
-            if (event.removedDisclaimer.value.indexOf('&date_like') === 0) {
+            if (event.removedDisclaimer.value.indexOf('&date') === 0) {
                 this.advanced.dateSearchAdvanced = '';
             }
 

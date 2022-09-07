@@ -49,7 +49,7 @@ export class AdvancedFilterComponent {
             },
             {
                 label: `${this.translate.instant('date')}: ${dateFormated}`,
-                value: dateFormated !== '' ? `&date_like=${this.dateSearchAdvanced}` : ''
+                value: dateFormated !== '' ? `&date=${this.dateSearchAdvanced}` : ''
             },
             {
                 label: `${this.translate.instant('nickname')}: ${this.usernameSearchAdvanced}`,
