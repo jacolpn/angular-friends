@@ -23,4 +23,5 @@ func GetConnection() {
 	}
 
 	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(&models.Task{})
 }

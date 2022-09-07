@@ -8,7 +8,7 @@ import (
 	"github.com/jacolpn/angular-friends/backend/models"
 )
 
-func Get(c *gin.Context) {
+func GetUser(c *gin.Context) {
 	email := c.DefaultQuery("email", "")
 
 	if email != "" {
@@ -39,5 +39,5 @@ func GetAllUser(c *gin.Context) {
 
 	database.DB.Find(&users)
 
-	c.JSON(200, users)
+	c.JSON(http.StatusOK, users)
 }

@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"time"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jacolpn/angular-friends/backend/controllers"
@@ -10,19 +8,17 @@ import (
 
 func HandleRequests() {
 	router := gin.Default()
+	router.Use(cors.Default())
+	// router.Use(middleware.TestMiddleware())
 
-	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:4200"},
-		AllowMethods:     []string{"PUT", "PATCH"},
-		AllowHeaders:     []string{"Origin"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			return origin == "https://github.com"
-		},
-		MaxAge: 12 * time.Hour,
-	}))
+	router.GET("/account", controllers.GetUser)
 
-	router.GET("/account", controllers.Get)
+	router.GET("/tasks", controllers.GetTask)
+	router.POST("/tasks", controllers.PostTask)
+	router.OPTIONS("/tasks", controllers.PostTask)
+	router.DELETE("/tasks/:id", controllers.DeleteTask)
+	router.PUT("/tasks/:id", controllers.PutTask)
+	router.PATCH("/tasks/:id", controllers.PatchTask)
+
 	router.Run(":3000")
 }
