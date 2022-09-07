@@ -12,6 +12,7 @@ func HandleRequests() {
 	// router.Use(middleware.TestMiddleware())
 
 	router.GET("/account", controllers.GetUser)
+	router.PATCH("/account/:id", controllers.PatchUser)
 
 	router.GET("/tasks", controllers.GetTask)
 	router.POST("/tasks", controllers.PostTask)

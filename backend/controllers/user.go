@@ -41,3 +41,20 @@ func GetAllUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, users)
 }
+
+func PatchUser(c *gin.Context) {
+	var user models.User
+
+	id := c.Params.ByName("id")
+	database.DB.First(&user, id)
+
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+		return
+	}
+
+	database.DB.Model(&user).Update("Password", user.Password)
+
+	c.JSON(http.StatusOK, user)
+}
