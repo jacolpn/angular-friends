@@ -17,11 +17,7 @@
             <div
                 *ngFor="let item of user; let i = index"
                 class="profile__paragraph"
-                [ngClass]="
-                    item.property === 'logout'
-                        ? 'text-red-500 hover:bg-red-100 cursor-pointer'
-                        : item.property === 'password' && 'cursor-pointer'
-                "
+                [ngClass]="item.property === 'logout' && 'text-red-500 hover:bg-red-100 cursor-pointer'"
                 (click)="item.property === 'logout' && onHandleParagraph(item.property)"
             >
                 <p>{{ item.label }}</p>
@@ -30,6 +26,7 @@
                     <p
                         class="text-gray-500"
                         *ngIf="item.property !== 'password' || !showEditPassword"
+                        [ngClass]="item.property === 'password' && 'cursor-pointer'"
                         (click)="onHandleParagraph(item.property)"
                     >
                         <span [id]="'paragraph-' + i">{{ item.value }}</span>
@@ -59,7 +56,7 @@
                             <button type="button" class="button__primary" (click)="changePassword()">
                                 {{ 'change' | translate }}
                             </button>
-                            <i class="po-icon po-icon-delete button__secondary" (click)="onHandleParagraph(item.property)"></i>
+                            <i class="po-icon po-icon-delete button__secondary cursor-pointer" (click)="onHandleParagraph(item.property)"></i>
                         </div>
                     </div>
                 </div>

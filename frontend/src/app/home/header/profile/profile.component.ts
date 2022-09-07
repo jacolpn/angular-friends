@@ -85,7 +85,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscription$.push(this.userService.patch(this.properties.id, { password: this.newPassword }).subscribe({
+        this.subscription$.push(this.userService.patch(this.properties.ID, { password: this.newPassword }).subscribe({
             next: () => {
                 this.resetFields();
                 this.poNotification.success(this.translate.instant('changePasswordSuccess'));
